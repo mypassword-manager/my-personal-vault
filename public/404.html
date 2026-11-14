@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Personal Vault</title>
+    <script>
+      // Hash routing means deep links rarely reach this file.
+      // If one does, send the browser back to the app root.
+      (function () {
+        var segments = window.location.pathname.split('/').filter(Boolean)
+        var root = segments.length ? '/' + segments[0] + '/' : '/'
+        window.location.replace(root + '#/')
+      })()
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to My Personal Vault…</p>
+  </body>
+</html>
