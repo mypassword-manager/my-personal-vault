@@ -193,3 +193,56 @@ async function submit() {
               <label class="label" for="su-password">Password</label>
               <input
                 id="su-password"
+                v-model="form.password"
+                class="input"
+                type="password"
+                autocomplete="new-password"
+              />
+              <p class="hint">At least 10 characters, with a letter and a number.</p>
+              <p v-if="errors.password" class="error">{{ errors.password }}</p>
+            </div>
+            <div class="field">
+              <label class="label" for="su-password2">Confirm password</label>
+              <input
+                id="su-password2"
+                v-model="form.confirmPassword"
+                class="input"
+                type="password"
+                autocomplete="new-password"
+              />
+              <p v-if="errors.confirmPassword" class="error">{{ errors.confirmPassword }}</p>
+            </div>
+          </template>
+
+          <p v-if="formError" class="alert alert-error">{{ formError }}</p>
+
+          <button class="btn btn-primary btn-block" type="submit" :disabled="busy">
+            {{ busy ? 'Creating account…' : 'Create Account' }}
+          </button>
+        </form>
+
+        <div class="row-between">
+          <RouterLink to="/signin">Already have an account? Sign in</RouterLink>
+        </div>
+      </div>
+
+      <div class="card card-tight notice">
+        <p class="dim small">
+          A master passphrase is set after verification. It is separate from your password or PIN and
+          is the only thing that decrypts your vault.
+        </p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.notice {
+  margin-top: 1rem;
+}
+
+.small {
+  margin: 0;
+  font-size: 0.85rem;
+}
+</style>
