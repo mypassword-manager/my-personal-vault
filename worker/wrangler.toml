@@ -3,6 +3,4 @@ main = "src/index.js"
 compatibility_date = "2025-01-01"
 
 [vars]
-SITE_URL = "https://mypassword-manager.github.io/my-personal-vault"
 MAILTRAP_FROM_EMAIL = "hello@no-reply.rcash.my"
-PIN_ITERATIONS = "210000"
