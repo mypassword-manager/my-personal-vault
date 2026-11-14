@@ -165,28 +165,32 @@ async function rateLimit(env, bucket, windowSeconds, max) {
 /* --------------------------------- mail --------------------------------- */
 
 async function sendMail(env, { to, subject, html, text }) {
-  const auth = btoa(`${env.MAILJET_API_KEY}:${env.MAILJET_SECRET_KEY}`)
-  const response = await fetch('https://api.mailjet.com/v3.1/send', {
+  if (!env.MAILTRAP_API_TOKEN || !env.MAILTRAP_FROM_EMAIL) {
+    throw new Error('Mailtrap email delivery is not configured.')
+  }
+
+  const response = await fetch('https://send.api.mailtrap.io/api/send', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Basic ${auth}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${env.MAILTRAP_API_TOKEN}`
+    },
     body: JSON.stringify({
-      Messages: [
-        {
-          From: { Email: env.MAILJET_FROM_EMAIL, Name: env.MAILJET_FROM_NAME },
-          To: [{ Email: to }],
-          Subject: subject,
-          TextPart: text,
-          HTMLPart: html
-        }
-      ]
+      from: {
+        email: env.MAILTRAP_FROM_EMAIL,
+        name: 'My Personal Vault'
+      },
+      to: [{ email: to }],
+      subject,
+      text,
+      html
     })
   })
+
   if (!response.ok) {
-    const detail = await response.text()
-    throw new Error(`Mailjet rejected the message: ${detail.slice(0, 200)}`)
+    throw new Error(`Mailtrap rejected the message (HTTP ${response.status}).`)
   }
 }
-
 function codeBlock(code) {
   return `<p style="font-size:32px;letter-spacing:10px;font-weight:700;margin:24px 0">${code}</p>`
 }
