@@ -1,5 +1,5 @@
 import { computed, reactive } from 'vue'
-import { supabase } from '../lib/supabase.js'
+import { neon } from '../lib/neon.js'
 import { decryptJson, encryptJson } from '../lib/crypto.js'
 import {
   createVaultKey,
@@ -71,7 +71,7 @@ export async function refreshStatus() {
     return 'unlocked'
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await neon
     .from('vault_keys')
     .select('user_id')
     .eq('user_id', userId)
@@ -88,7 +88,7 @@ export async function refreshStatus() {
 
 export async function getKeyParams() {
   const userId = requireUser()
-  const { data, error } = await supabase
+  const { data, error } = await neon
     .from('vault_keys')
     .select('iterations, salt, check_iv, check_ct, enc_version')
     .eq('user_id', userId)
@@ -102,7 +102,7 @@ export async function createVault(passphrase) {
   vaultState.busy = true
   try {
     const row = await createVaultKey(passphrase)
-    const { error } = await supabase.from('vault_keys').insert({
+    const { error } = await neon.from('vault_keys').insert({
       user_id: userId,
       kdf: row.kdf,
       iterations: row.iterations,
@@ -158,7 +158,7 @@ export async function loadRecords() {
 
   vaultState.loading = true
   try {
-    const { data, error } = await supabase
+    const { data, error } = await neon
       .from('vault_records')
       .select('id, record_type, iv, ciphertext, enc_version, created_at, updated_at')
       .eq('user_id', userId)
@@ -231,7 +231,7 @@ export async function saveRecord(form) {
   vaultState.busy = true
   try {
     if (form.id) {
-      const { error } = await supabase
+      const { error } = await neon
         .from('vault_records')
         .update({
           record_type: recordType,
@@ -256,7 +256,7 @@ export async function saveRecord(form) {
       return form.id
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await neon
       .from('vault_records')
       .insert({
         user_id: userId,
@@ -288,7 +288,7 @@ export async function deleteRecord(id) {
   const userId = requireUser()
   vaultState.busy = true
   try {
-    const { error } = await supabase
+    const { error } = await neon
       .from('vault_records')
       .delete()
       .eq('id', id)
@@ -322,7 +322,7 @@ export async function importRecords(records) {
       const { iv, ct, v } = await encryptJson(key, payload)
       const recordType = record.record_type === 'personal' ? 'personal' : 'login'
 
-      const { data, error } = await supabase
+      const { data, error } = await neon
         .from('vault_records')
         .insert({
           user_id: userId,
