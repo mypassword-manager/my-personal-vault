@@ -2,9 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import OtpForm from '../components/OtpForm.vue'
-import { supabase } from '../lib/supabase.js'
-import { api } from '../lib/api.js'
-import { authState } from '../stores/auth.js'
+import { authState, completeSignup, resendSignupCode } from '../stores/auth.js'
 
 const router = useRouter()
 
@@ -25,17 +23,7 @@ async function verify(code) {
   error.value = ''
   busy.value = true
   try {
-    const result = await api.verifySignupCode({ challengeId: pending.value.challengeId, code })
-
-    const { data, error: verifyError } = await supabase.auth.verifyOtp({
-      token_hash: result.tokenHash,
-      type: 'magiclink'
-    })
-    if (verifyError) throw new Error(verifyError.message)
-
-    authState.session = data.session
-    authState.user = data.session?.user || null
-    authState.pendingSignup = null
+    await completeSignup(code)
 
     router.push('/unlock')
   } catch (err) {
@@ -49,7 +37,7 @@ async function verify(code) {
 async function resend() {
   error.value = ''
   try {
-    await api.resendSignupCode({ challengeId: pending.value.challengeId })
+    await resendSignupCode()
     if (otpRef.value) otpRef.value.restartCooldown(60)
   } catch (err) {
     error.value = err.message

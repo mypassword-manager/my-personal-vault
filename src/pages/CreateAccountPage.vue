@@ -1,8 +1,7 @@
 <script setup>
 import { computed, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { api } from '../lib/api.js'
-import { authState } from '../stores/auth.js'
+import { signUpWithPassword } from '../stores/auth.js'
 import {
   validateConfirm,
   validateEmail,
@@ -79,22 +78,7 @@ async function submit() {
   }
 
   try {
-    let result
-
-    if (isEmail.value) {
-      result = await api.signupEmailPassword({ ...base, password: form.password })
-    } else if (form.method === METHOD_USERNAME) {
-      result = await api.signupUsernamePassword({ ...base, password: form.password })
-    } else {
-      result = await api.signupUsernamePin({ ...base, pin: form.pin })
-    }
-
-    authState.pendingSignup = {
-      challengeId: result.challengeId,
-      emailMasked: result.emailMasked,
-      username: base.username,
-      method: form.method
-    }
+    await signUpWithPassword({ ...base, password: form.password, method: form.method })
 
     router.push('/verify-email')
   } catch (error) {
@@ -118,8 +102,8 @@ async function submit() {
           <label class="label" for="signup-method">Select Sign-up Method</label>
           <select id="signup-method" v-model="form.method" class="select" @change="clearErrors">
             <option :value="METHOD_EMAIL">Sign up with Email &amp; Password</option>
-            <option :value="METHOD_USERNAME">Sign up with Username &amp; Password</option>
-            <option :value="METHOD_PIN">Sign up with Username &amp; PIN</option>
+            <option :value="METHOD_USERNAME" disabled>Username &amp; Password (coming later)</option>
+            <option :value="METHOD_PIN" disabled>Username &amp; PIN (coming later)</option>
           </select>
         </div>
 

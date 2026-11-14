@@ -141,8 +141,8 @@ function changeMethod() {
           <label class="label" for="signin-method">Select Login Method</label>
           <select id="signin-method" v-model="form.method" class="select" @change="onMethodChange">
             <option :value="METHOD_EMAIL">Sign in with Email &amp; Password</option>
-            <option :value="METHOD_USERNAME">Sign in with Username &amp; Password</option>
-            <option :value="METHOD_PIN">Sign in with Username &amp; PIN</option>
+            <option :value="METHOD_USERNAME" disabled>Username &amp; Password (coming later)</option>
+            <option :value="METHOD_PIN" disabled>Username &amp; PIN (coming later)</option>
           </select>
         </div>
 
@@ -202,10 +202,7 @@ function changeMethod() {
           <RouterLink to="/create-account">Create Account</RouterLink>
           <RouterLink to="/forgot-password">Forgot Password?</RouterLink>
         </div>
-        <p class="faint small-note">
-          Forgot your PIN?
-          <RouterLink to="/reset-pin">Reset PIN</RouterLink>
-        </p>
+        <p class="faint small-note">PIN sign-in will be available after the secure Worker migration.</p>
       </div>
 
       <div v-else class="card stack">
