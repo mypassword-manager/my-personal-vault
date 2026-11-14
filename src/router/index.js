@@ -33,14 +33,11 @@ const routes = [
   },
   {
     path: '/update-password',
-    name: 'update-password',
-    component: () => import('../pages/UpdatePasswordPage.vue')
+    redirect: '/forgot-password'
   },
   {
     path: '/reset-pin',
-    name: 'reset-pin',
-    component: () => import('../pages/ResetPinPage.vue'),
-    meta: { guestOnly: true }
+    redirect: '/signin'
   },
   {
     path: '/unlock',
