@@ -59,10 +59,18 @@ function randomBytes(length) {
 }
 
 function randomDigits(length) {
-  const bytes = randomBytes(length)
-  let out = ''
-  for (let i = 0; i < length; i += 1) out += String(bytes[i] % 10)
-  return out
+  let code = ''
+
+  while (code.length < length) {
+    const bytes = randomBytes(length - code.length)
+    for (const byte of bytes) {
+      if (byte < 250 && code.length < length) {
+        code += String(byte % 10)
+      }
+    }
+  }
+
+  return code
 }
 
 async function sha256Hex(text) {
