@@ -3,7 +3,6 @@ main = "src/index.js"
 compatibility_date = "2025-01-01"
 
 [vars]
-SITE_URL = "https://your-user.github.io/my-personal-vault"
-MAILJET_FROM_EMAIL = "no-reply@example.com"
-MAILJET_FROM_NAME = "My Personal Vault"
+SITE_URL = "https://mypassword-manager.github.io/my-personal-vault"
+MAILTRAP_FROM_EMAIL = "hello@no-reply.rcash.my"
 PIN_ITERATIONS = "210000"
