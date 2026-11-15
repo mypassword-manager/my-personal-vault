@@ -30,10 +30,8 @@ jobs:
 
       - name: Build
         env:
-          VITE_BASE: /${{ github.event.repository.name }}/
-          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
-          VITE_WORKER_URL: ${{ vars.VITE_WORKER_URL }}
+          VITE_BASE: /
+          VITE_NEON_URL: ${{ vars.VITE_NEON_URL }}
         run: npm run build
 
       - uses: actions/configure-pages@v5
